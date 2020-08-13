@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import ImageCard from './components/ImageCard'
 import ImageSearch from './components/ImageSearch'
 
@@ -7,7 +7,7 @@ function App() {
   const [loading, setLoading] = useState(true)
   const [term, setTerm] = useState('')
 
-  const searchText = () => {
+  const searchText = useCallback(() => {
     fetch(
       `https://pixabay.com/api/?key=${process.env.REACT_APP_PIXABAY_API_KEY}&q=${term}&image_type=photo&pretty=true`
     )
@@ -17,11 +17,11 @@ function App() {
         setImages(data.hits)
       })
       .catch(err => console.log(err))
-  }
-
+      }
+    , [term])
   useEffect(() => {
     searchText()
-  }, [])
+  }, [searchText])
 
   return (
     <div className="container mx-auto">
